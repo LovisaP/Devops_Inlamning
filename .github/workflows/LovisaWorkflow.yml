@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs: 
       show_message:
-        description: "Log errors if tests fails"
+        description: "Run without errors"
         required: false
         default: true
         type: boolean
@@ -28,7 +28,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m unittest test_main.py  # Kör testfilen som innehåller tester för main.py
+          pytest
 
       - name: Failing step if show_message is 'false'
         run: |
