@@ -5,8 +5,8 @@ on:
     inputs: 
       show_message:
         description: "Log errors if tests fails"
-        required: true
-        default: "false"
+        required: false
+        default: true
         type: boolean
 
 jobs:
@@ -19,27 +19,26 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
-      - name: Install requests
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests  # Installera 'requests' direkt här
+          pip install -r requirements.txt  # Installera alla beroenden från requirements.txt
 
-      - name: Run API test script
+      - name: Run tests
         run: |
-          python test_main.py
+          python -m unittest test_main.py  # Kör testfilen som innehåller tester för main.py
 
       - name: Failing step if show_message is 'false'
         run: |
-          echo "Error has occurd" > error.log
-          exit 1
+          echo "Error has occurred" > error.log
+          exit 1  # Avsluta med fel om show_message är false
         if: ${{ github.event.inputs.show_message == 'false' }}
 
       - name: Upload error log
-        if: failure()
+        if: failure() 
         uses: actions/upload-artifact@v3
         with: 
           name: error-log
           path: error.log
-
