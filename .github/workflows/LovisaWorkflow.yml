@@ -8,9 +8,12 @@ on:
   workflow_dispatch:
      inputs: 
       show_message:
-       description: "Tests"
+       description: "Log errors if tests fails"
        required: true
        default: "false"
+
+  env: 
+    API_url: 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
