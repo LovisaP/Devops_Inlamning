@@ -1,0 +1,35 @@
+# This is a basic workflow that is manually triggered
+
+name: Lovisas workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+     inputs: 
+      show_message:
+       description: "Tests"
+       required: true
+       default: "false"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  error_log:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Failing step if show_message is 'false'
+        run: |
+          echo "Error has occurd" > error.log
+          exit 1
+        
+        if: ${{ github.event.inputs.show_message == 'false' }}
+      - name: Upload error log
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with: 
+          name: error-log
+          path: error.log
