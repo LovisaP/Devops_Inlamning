@@ -12,24 +12,38 @@ on:
        required: true
        default: "false"
 
-  env: 
-    API_url: 
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
+  # This workflow contains a job called "error_log"
   error_log:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      
+      # Test: Make an API call and check the response
+      - name: Test API response
+        run: |
+
+          API_URL="https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.0/lat/59.0/data.json"
+          
+          response=$(curl -s -w "%{http_code}" -o /dev/null $API_URL)
+          
+          if [ "$response" -eq 200 ]; then
+            echo "API response successful: Status code 200"
+          else
+            echo "API request failed with status code $response"
+            exit 1  
+          fi
+
+      # Failing step if show_message is 'false'
       - name: Failing step if show_message is 'false'
         run: |
           echo "Error has occurd" > error.log
           exit 1
-        
         if: ${{ github.event.inputs.show_message == 'false' }}
+        
+      # Upload error log if there is failure
       - name: Upload error log
         if: failure()
         uses: actions/upload-artifact@v3
