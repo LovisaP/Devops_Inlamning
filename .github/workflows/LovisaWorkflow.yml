@@ -60,5 +60,5 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker tag myapp-image ${{ secrets.DOCKER_USERNAME }}/devopsimage:latest
+          docker tag devopsimage ${{ secrets.DOCKER_USERNAME }}/devopsimage:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/devopsimage:latest
