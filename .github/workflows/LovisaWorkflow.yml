@@ -28,7 +28,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          pytest test_main.py
 
       - name: Failing step if show_message is 'false'
         run: |
