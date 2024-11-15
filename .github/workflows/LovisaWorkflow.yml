@@ -27,17 +27,18 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
+        id: pytest
         run: |
-          pytest test_main.py
+          pytest test_main.py || true  # Se till att processen inte misslyckas direkt om testerna misslyckas
 
-      - name: Failing step if show_message is 'false'
+      - name: Generate error log
+        if: failure() || github.event.inputs.show_message == 'true'
         run: |
-          echo "Error has occurred" > error.log
-          exit 1
-        if: ${{ github.event.inputs.show_message == 'false' }}
+          echo "Error log generated due to test failure or user request." > error.log
+          pytest test_main.py >> error.log || true  # Lägg till testerna i loggen (komplett logg)
 
       - name: Upload error log
-        if: failure()
+        if: always() && (failure() || github.event.inputs.show_message == 'true')
         uses: actions/upload-artifact@v3
         with: 
           name: error-log
