@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs: 
       show_message:
-        description: "Run without errors"
-        required: false
-        default: true
+        description: "Run with errors"
+        required: true
+        default: false
         type: boolean
 
 jobs:
