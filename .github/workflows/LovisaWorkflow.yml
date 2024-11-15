@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         id: pytest
         run: |
-          pytest test_main.py || true  # Se till att processen inte misslyckas direkt om testerna misslyckas
+          pytest test_main.py || true
 
       - name: Generate error log
         if: failure() || github.event.inputs.show_message == 'true'
